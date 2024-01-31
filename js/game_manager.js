@@ -9,6 +9,7 @@ function GameManager(size, InputManager, Actuator, StorageManager) {
   this.inputManager.on("move", this.move.bind(this));
   this.inputManager.on("restart", this.restart.bind(this));
   this.inputManager.on("keepPlaying", this.keepPlaying.bind(this));
+  this.inputManager.on("tweet", this.tweet.bind(this));
 
   this.setup();
 }
@@ -24,6 +25,23 @@ GameManager.prototype.restart = function () {
 GameManager.prototype.keepPlaying = function () {
   this.keepPlaying = true;
   this.actuator.continueGame(); // Clear the game won/lost message
+};
+
+GameManager.prototype.tweet = function () {
+  var tweetUrl = `https://twitter.com/share?text=${encodeURIComponent(
+    this.won
+      ? `あなたは儲かった！ スコア: ${this.score}両
+
+プレイはこちらから →
+https://wand125.github.io/2048-3x3/
+`
+      : `あなたは儲からなかった！ スコア: ${this.score}両
+
+プレイはこちらから →
+https://wand125.github.io/2048-3x3/
+`
+  )}`;
+  window.open(tweetUrl, "_blank");
 };
 
 // Return true if the game is lost, or has won and the user hasn't kept playing
